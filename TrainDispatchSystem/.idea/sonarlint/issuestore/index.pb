@@ -17,3 +17,5 @@ S
 #src/main/java/org/example/Time.java,8\1\8193a5bcb23b2cbf7c227718d69121ac8095615d
 Z
 *src/main/java/org/example/TrainStatus.java,d\c\dcc8556cc20be3cf42c47b26055a84b306eec5b9
+a
+1src/main/java/edu/ntnu/stud/TrainDispatchApp.java,5\7\57fc11b6f0f3de8994a6b6d6ad8034d9dccfa8f3
