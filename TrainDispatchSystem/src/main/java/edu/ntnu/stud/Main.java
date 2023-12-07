@@ -1,4 +1,4 @@
-package org.example;
+package edu.ntnu.stud;
 
 public class Main {
 }
