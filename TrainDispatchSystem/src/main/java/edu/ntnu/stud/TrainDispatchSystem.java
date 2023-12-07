@@ -1,50 +1,47 @@
 package edu.ntnu.stud;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.time.Duration;
 
 /**
  * This class creates a system for train departures.
  *
- * @version 1.0 2023-12-07
+ * @version 1.1 2023-12-07
  *
  * */
 
 public class TrainDispatchSystem {
     // Class that that declares variables, creates a constructor, creates methods for adding, removing and updating train departures, and creates a method for printing the train departures.
 
-    private final TrainDeparture[] trainDepartures;
-    private int numberOfDepartures;
+    private final List<TrainDeparture> trainDepartures;
 
     public TrainDispatchSystem() {
-        trainDepartures = new TrainDeparture[100];
-        numberOfDepartures = 0;
+        trainDepartures = new ArrayList<>();
     }
 
     public void addTrainDeparture(TrainDeparture trainDeparture) {
-        trainDepartures[numberOfDepartures] = trainDeparture;
-        numberOfDepartures++;
+        trainDepartures.add(trainDeparture);
     }
 
     public void removeTrainDeparture(int index) {
-        for (int i = index; i < numberOfDepartures - 1; i++) {
-            trainDepartures[i] = trainDepartures[i + 1];
-        }
-        numberOfDepartures--;
+        trainDepartures.remove(index);
     }
 
     //Method that returns the list of train departures sorted by departure time.
     public TrainDeparture[] getTrainDeparturesSortedByDepartureTime() {
-        TrainDeparture[] sortedTrainDepartures = Arrays.copyOf(trainDepartures, numberOfDepartures);
-        Arrays.sort(sortedTrainDepartures, (trainDeparture1, trainDeparture2) -> trainDeparture1.getDepartureTime().compareTo(trainDeparture2.getDepartureTime()));
-        return sortedTrainDepartures;
+        TrainDeparture[] trainDeparturesSortedByDepartureTime = new TrainDeparture[trainDepartures.size()];
+        trainDepartures.toArray(trainDeparturesSortedByDepartureTime);
+        Arrays.sort(trainDeparturesSortedByDepartureTime);
+        return trainDeparturesSortedByDepartureTime;
     }
 
     //Method that returns the list of train departures sorted by train number.
     public TrainDeparture getTrainDepartureByTrainNumber(int trainNumber) {
-        for (int i = 0; i < numberOfDepartures; i++) {
-            if (trainDepartures[i].getTrainNumber() == trainNumber) {
-                return trainDepartures[i];
+        for (TrainDeparture trainDeparture : trainDepartures) {
+            if (trainDeparture.getTrainNumber() == trainNumber) {
+                return trainDeparture;
             }
         }
         return null;
@@ -52,40 +49,40 @@ public class TrainDispatchSystem {
 
     //Method that returns the list of train departures sorted by destination.
     public TrainDeparture[] getTrainDeparturesByDestination(String destination) {
-        TrainDeparture[] trainDeparturesByDestination = new TrainDeparture[numberOfDepartures];
-        int numberOfTrainDeparturesByDestination = 0;
-        for (int i = 0; i < numberOfDepartures; i++) {
-            if (trainDepartures[i].getDestination().equals(destination)) {
-                trainDeparturesByDestination[numberOfTrainDeparturesByDestination] = trainDepartures[i];
-                numberOfTrainDeparturesByDestination++;
+        List<TrainDeparture> trainDeparturesByDestination = new ArrayList<>();
+        for (TrainDeparture trainDeparture : trainDepartures) {
+            if (trainDeparture.getDestination().equals(destination)) {
+                trainDeparturesByDestination.add(trainDeparture);
             }
         }
-        return Arrays.copyOf(trainDeparturesByDestination, numberOfTrainDeparturesByDestination);
+        TrainDeparture[] trainDeparturesByDestinationArray = new TrainDeparture[trainDeparturesByDestination.size()];
+        trainDeparturesByDestination.toArray(trainDeparturesByDestinationArray);
+        return trainDeparturesByDestinationArray;
     }
 
     //Method to update train departure information.
     public void updateTrainDeparture(TrainDeparture trainDeparture) {
-        for (int i = 0; i < numberOfDepartures; i++) {
-            if (trainDepartures[i].getTrainNumber() == trainDeparture.getTrainNumber()) {
-                trainDepartures[i] = trainDeparture;
+        for (int i = 0; i < trainDepartures.size(); i++) {
+            if (trainDepartures.get(i).getTrainNumber() == trainDeparture.getTrainNumber()) {
+                trainDepartures.set(i, trainDeparture);
             }
         }
     }
 
     //Method for assigning a track to a train departure.
-    public void assignTrackToTrainDeparture(int trainNumber, int track) {
-        for (int i = 0; i < numberOfDepartures; i++) {
-            if (trainDepartures[i].getTrainNumber() == trainNumber) {
-                trainDepartures[i].setTrack(track);
+    public void assignTrackToTrainDeparture(int trainNumber, String track) {
+        for (TrainDeparture trainDeparture : trainDepartures) {
+            if (trainDeparture.getTrainNumber() == trainNumber) {
+                trainDeparture.setTrack(track);
             }
         }
     }
 
     //Method to set delay for a train departure.
     public void setDelayForTrainDeparture(int trainNumber, Duration minutes) {
-        for (int i = 0; i < numberOfDepartures; i++) {
-            if (trainDepartures[i].getTrainNumber() == trainNumber) {
-                trainDepartures[i].setDelay(minutes);
+        for (TrainDeparture trainDeparture : trainDepartures) {
+            if (trainDeparture.getTrainNumber() == trainNumber) {
+                trainDeparture.setDelay(minutes);
             }
         }
     }
