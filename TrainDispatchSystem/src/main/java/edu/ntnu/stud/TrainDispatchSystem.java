@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.time.Duration;
+import java.time.LocalTime;
 
 /**
  * This class creates a system for train departures.
  *
- * @version 1.1 2023-12-07
+ * @version 1.2 2023-12-07
  *
  * */
 
@@ -85,5 +86,12 @@ public class TrainDispatchSystem {
                 trainDeparture.setDelay(minutes);
             }
         }
+    }
+
+    //Method for checking if a train has departed.
+    public void checkTrainDepartures(Clock clock) {
+        LocalTime currentTime = clock.getCurrentTime();
+        // Handle the train departure
+        trainDepartures.removeIf(trainDeparture -> trainDeparture.hasDeparted(currentTime));
     }
 }
