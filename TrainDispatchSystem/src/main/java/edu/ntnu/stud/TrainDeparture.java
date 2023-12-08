@@ -10,7 +10,7 @@ import java.time.LocalTime;
  * LocalTime, String, int, Duration
  * These data types fit the variables because:
  * departureTime is a time, line is a string, trainNumber is an integer, destination is a string, track is an integer, delay is a duration.
- * @version 1.1 2023-12-07
+ * @version 1.2 2023-12-07
  * */
 
 public class TrainDeparture {
@@ -73,9 +73,14 @@ public class TrainDeparture {
         }
     }
 
+    /**
+     * Gets the train number.
+     * @return the train number
+     * */
     public int getTrainNumber() {
         return trainNumber;
     }
+
     /**
      * Sets the train number.
      * @param trainNumber the train number
@@ -96,6 +101,7 @@ public class TrainDeparture {
     public String getDestination() {
         return destination;
     }
+
     /**
      * Sets the destination.
      * @param destination the destination
@@ -115,11 +121,12 @@ public class TrainDeparture {
     /**
      * Sets the track. The track is assigned as a String, but converted to an integer before being assigned to the track variable.
      * @param track the track
-     * @throws IllegalArgumentException if the track is a string, as it should be a number.
+     * @throws IllegalArgumentException if the track is a string containing letters, as it should be a number.
      * */
+
     public void setTrack(String track) {
         if (track == null || !track.matches("\\d+")) {
-            throw new IllegalArgumentException("Track must be a number");
+            throw new IllegalArgumentException("Track must be a positive number");
         } else {
             this.track = String.valueOf(Integer.parseInt(track));
         }
@@ -129,6 +136,7 @@ public class TrainDeparture {
      * Gets the delay.
      * @return the delay
      */
+
     public Duration getDelay() {
         return delay;
     }
@@ -138,6 +146,7 @@ public class TrainDeparture {
      * @param delay the delay
      * @throws IllegalArgumentException if the delay is null, or if the delay is negative.
      * */
+
     public void setDelay(Duration delay) {
         if (delay == null || delay.isNegative() || delay.isZero()) {
             throw new IllegalArgumentException("Delay must be a positive number");
@@ -148,9 +157,9 @@ public class TrainDeparture {
 
     /**
      * Checks if the train has departed.
-     * @param currentTime the current time
      * @return true if the train has departed, false if not.
      * */
+
     public boolean hasDeparted(LocalTime currentTime) {
         return currentTime.isAfter(departureTime);
     }
@@ -159,6 +168,7 @@ public class TrainDeparture {
      * Prints the details of the train departure.
      * @return the details of a given train departure
      * */
+
     public String printDetails() {
         return "TrainDeparture{" +
                 "departureTime=" + departureTime +
