@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 
 /**
  * This class creates the framework for testing the TrainDispatchSystem class.
- * @version 1.0 2023-12-08
+ * @version 1.1 2023-12-09
  */
 
 class TrainDispatchSystemTest {
@@ -105,7 +105,7 @@ class TrainDispatchSystemTest {
         TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", null, Duration.ofMinutes(0));
         trainDispatchSystem.addTrainDeparture(trainDeparture);
         trainDispatchSystem.setDelayForTrainDeparture(1, Duration.ofHours(1), Duration.ofMinutes(5));
-        assertEquals(Duration.ofMinutes(5), trainDeparture.getDelay());
+        assertEquals(Duration.ofHours(1).plusMinutes(5), trainDeparture.getDelay());
     }
 
     @Test
