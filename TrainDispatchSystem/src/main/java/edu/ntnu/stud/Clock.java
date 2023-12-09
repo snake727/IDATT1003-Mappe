@@ -5,7 +5,7 @@ import java.time.LocalTime;
 /**
  * This class represents a clock, and its sole purpose is to keep track of time, and provide methods for dealing with time.
  *
- * @version 1.0 2023-12-07
+ * @version 1.1 2023-12-08
  *
  * */
 
