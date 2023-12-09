@@ -11,7 +11,7 @@ import java.time.LocalTime;
 /**
  * This class creates a system for train departures.
  *
- * @version 1.3 2023-12-08
+ * @version 1.4 2023-12-09
  *
  * */
 
@@ -127,6 +127,14 @@ public class TrainDispatchSystem {
      * */
     public void removeTrainDepartureIfDeparted(LocalTime currentTime) {
         trainDepartures.removeIf(trainDeparture -> trainDeparture.getDepartureTime().isBefore(currentTime));
+    }
+
+    /**
+     * Method that prints the all the departures in a list.
+     * @return the details of all train departures in a list
+     * */
+    public List<TrainDeparture> getTrainDepartures() {
+        return trainDepartures;
     }
 }
 
