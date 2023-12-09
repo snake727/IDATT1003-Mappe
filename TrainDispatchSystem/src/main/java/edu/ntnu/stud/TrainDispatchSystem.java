@@ -3,13 +3,15 @@ package edu.ntnu.stud;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.time.Duration;
 import java.time.LocalTime;
+
 
 /**
  * This class creates a system for train departures.
  *
- * @version 1.2 2023-12-07
+ * @version 1.3 2023-12-08
  *
  * */
 
@@ -21,24 +23,45 @@ public class TrainDispatchSystem {
     public TrainDispatchSystem() {
         trainDepartures = new ArrayList<>();
     }
-
+    /**
+     * Method that adds a train departure. Train departure cannot be added if train number already exists.
+     * @param trainDeparture the train departure details
+     * @throws IllegalArgumentException if the train number already exists
+     * */
     public void addTrainDeparture(TrainDeparture trainDeparture) {
+        for (TrainDeparture trainDeparture1 : trainDepartures) {
+            if (trainDeparture1.getTrainNumber() == trainDeparture.getTrainNumber()) {
+                throw new IllegalArgumentException("Train number already exists");
+            }
+        }
         trainDepartures.add(trainDeparture);
     }
 
+    /**
+     * Method that removes a train departure.
+     * @param index the index of the train departure to be removed
+     * @throws IndexOutOfBoundsException if the index is out of bounds
+     */
     public void removeTrainDeparture(int index) {
         trainDepartures.remove(index);
     }
 
-    //Method that returns the list of train departures sorted by departure time.
+    /**
+     * Method that returns the list of train departures sorted by departure time.
+     * @return the train departures
+     * */
     public TrainDeparture[] getTrainDeparturesSortedByDepartureTime() {
         TrainDeparture[] trainDeparturesSortedByDepartureTime = new TrainDeparture[trainDepartures.size()];
         trainDepartures.toArray(trainDeparturesSortedByDepartureTime);
-        Arrays.sort(trainDeparturesSortedByDepartureTime);
+        Arrays.sort(trainDeparturesSortedByDepartureTime, Comparator.comparing(TrainDeparture::getDepartureTime));
         return trainDeparturesSortedByDepartureTime;
     }
 
-    //Method that returns the list of train departures sorted by train number.
+    /**
+     * Method that returns a train departure by train number.
+     * @param trainNumber the train number
+     * @return a train departure
+     * */
     public TrainDeparture getTrainDepartureByTrainNumber(int trainNumber) {
         for (TrainDeparture trainDeparture : trainDepartures) {
             if (trainDeparture.getTrainNumber() == trainNumber) {
@@ -48,7 +71,11 @@ public class TrainDispatchSystem {
         return null;
     }
 
-    //Method that returns the list of train departures sorted by destination.
+    /**
+     * Method that returns the list of train departures sorted by destination.
+     * @param destination the destination
+     * @return the train departures
+     * */
     public TrainDeparture[] getTrainDeparturesByDestination(String destination) {
         List<TrainDeparture> trainDeparturesByDestination = new ArrayList<>();
         for (TrainDeparture trainDeparture : trainDepartures) {
@@ -61,16 +88,11 @@ public class TrainDispatchSystem {
         return trainDeparturesByDestinationArray;
     }
 
-    //Method to update train departure information.
-    public void updateTrainDeparture(TrainDeparture trainDeparture) {
-        for (int i = 0; i < trainDepartures.size(); i++) {
-            if (trainDepartures.get(i).getTrainNumber() == trainDeparture.getTrainNumber()) {
-                trainDepartures.set(i, trainDeparture);
-            }
-        }
-    }
-
-    //Method for assigning a track to a train departure.
+    /**
+     * Method for assigning a track to a train departure.
+     * @param trainNumber the train number
+     * @param track the track
+     */
     public void assignTrackToTrainDeparture(int trainNumber, String track) {
         for (TrainDeparture trainDeparture : trainDepartures) {
             if (trainDeparture.getTrainNumber() == trainNumber) {
@@ -79,19 +101,32 @@ public class TrainDispatchSystem {
         }
     }
 
-    //Method to set delay for a train departure.
-    public void setDelayForTrainDeparture(int trainNumber, Duration minutes) {
+    /**
+     * Method to set delay for a train departure. Method needs both amount of hours and minutes.
+     * @param trainNumber the train number
+     * @param minutes the amount of minutes to delay the train departure.
+     * @throws IllegalArgumentException if the minutes is negative.
+     * @throws IllegalStateException if the train departure has already departed.
+     * */
+    public void setDelayForTrainDeparture(int trainNumber, Duration hours, Duration minutes) {
         for (TrainDeparture trainDeparture : trainDepartures) {
             if (trainDeparture.getTrainNumber() == trainNumber) {
-                trainDeparture.setDelay(minutes);
+                if (minutes.isNegative()) {
+                    throw new IllegalArgumentException("Minutes cannot be negative");
+                } else if (trainDeparture.getDepartureTime().isBefore(LocalTime.now())) {
+                    throw new IllegalStateException("Train departure has already departed");
+                } else {
+                    trainDeparture.setDelay(hours, minutes);
+                }
             }
         }
     }
 
-    //Method for checking if a train has departed.
-    public void checkTrainDepartures(Clock clock) {
-        LocalTime currentTime = clock.getCurrentTime();
-        // Handle the train departure
-        trainDepartures.removeIf(trainDeparture -> trainDeparture.hasDeparted(currentTime));
+    /**
+     * Method that checks if a train has departed, and removes it from the list of train departures if it has. The method is called every time the clock is updated. The method should use the Clock class to get the current time.
+     * */
+    public void removeTrainDepartureIfDeparted(LocalTime currentTime) {
+        trainDepartures.removeIf(trainDeparture -> trainDeparture.getDepartureTime().isBefore(currentTime));
     }
 }
+
