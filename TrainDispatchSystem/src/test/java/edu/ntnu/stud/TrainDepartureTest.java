@@ -49,9 +49,11 @@ class TrainDepartureTest {
     @Test
     @DisplayName("Check if setDelay works")
     void testSetDelay() {
-        TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", "1", Duration.ofMinutes(0));
-        trainDeparture.setDelay(Duration.ofMinutes(5));
-        assertEquals(Duration.ofMinutes(5), trainDeparture.getDelay());
+        TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", "1", null);
+        trainDeparture.setDelay(Duration.ofHours(1),Duration.ofMinutes(30));
+        assertEquals(Duration.ofHours(1).plusMinutes(30), trainDeparture.getDelay());
+        assertNotEquals(Duration.ofHours(1).plusMinutes(29), trainDeparture.getDelay());
+        assertNotEquals(Duration.ofHours(1).plusMinutes(31), trainDeparture.getDelay());
     }
 
     @Test
@@ -120,30 +122,43 @@ class TrainDepartureTest {
         assertFalse(trainDeparture.hasDeparted(LocalTime.of(12, 30)));
         assertTrue(trainDeparture.hasDeparted(LocalTime.of(12, 31)));
     }
+    
+    @Test
+    @DisplayName("Check if hasDeparted works with delay")
+    void testHasDepartedWithDelay() {
+        TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", "1", Duration.ofSeconds(30));
+        assertFalse(trainDeparture.hasDeparted(LocalTime.of(12, 29)));
+        assertFalse(trainDeparture.hasDeparted(LocalTime.of(12, 30)));
+        assertFalse(trainDeparture.hasDeparted(LocalTime.of(12, 30, 30)));
+        assertTrue(trainDeparture.hasDeparted(LocalTime.of(12, 31)));
+    }
+
 
     @Test
-    @DisplayName("Check if setDepartureTime throws IllegalArgumentException when departure time is null, above 23:59 or below 00:00")
-    void testSetDepartureTimeThrowsIllegalArgumentExceptionWhenDepartureTimeIsNullOrAbove2359OrBelow0000() {
+    @DisplayName("Check if setDepartureTime throws IllegalArgumentException when departure time is null")
+    void testSetDepartureTimeThrowsIllegalArgumentExceptionIfInvalidInput() {
         TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", "1", Duration.ofMinutes(0));
 
         // Checks if IllegalArgumentException is thrown when departure time is set to null.
         assertThrows(IllegalArgumentException.class, () -> trainDeparture.setDepartureTime(null));
-
-        // Checks if IllegalArgumentException is thrown when departure time is set to 24:00.
-        assertThrows(IllegalArgumentException.class, () -> trainDeparture.setDepartureTime(LocalTime.of(24, 0)));
-
-        // Checks if IllegalArgumentException is thrown when departure time is set to 00:00.
-        assertThrows(IllegalArgumentException.class, () -> trainDeparture.setDepartureTime(LocalTime.of(0, 0)));
-
-        // Checks if IllegalArgumentException is thrown when departure time is set to 23:60.
-        assertThrows(IllegalArgumentException.class, () -> trainDeparture.setDepartureTime(LocalTime.of(23, 60)));
-
-        // Checks if IllegalArgumentException is thrown when departure time is set to 00:60.
-        assertThrows(IllegalArgumentException.class, () -> trainDeparture.setDepartureTime(LocalTime.of(0, 60)));
     }
 
+    @Test
+    @DisplayName("Check if printDetails works. PT0S is a standard representation of duration of time in the ISO-8601 format, where P indicates the period (duration) and T indicates the time. The number before the S indicates the number of seconds.")
+    void testPrintDetails() {
 
+        // Checks if printDetails() works when delay is 0 minutes.
+        TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 123, "Oslo", "1", Duration.ofMinutes(0));
+        assertEquals("Train departure details: departure-time = 12:30, line = L1, train-number = 123, destination = Oslo, track = 1, delay = No delay", trainDeparture.printDetails());
 
+        // Checks if printDetails() works when delay is 1 minute.
+        TrainDeparture trainDeparture2 = new TrainDeparture(LocalTime.of(12, 30), "L1", 123, "Oslo", "1", Duration.ofMinutes(1));
+        assertEquals("Train departure details: departure-time = 12:30, line = L1, train-number = 123, destination = Oslo, track = 1, delay = 1 minutes", trainDeparture2.printDetails());
+
+        // Checks if printDetails() works when delay is 1 hour and 30 minutes.
+        TrainDeparture trainDeparture3 = new TrainDeparture(LocalTime.of(12, 30), "L1", 123, "Oslo", "1", Duration.ofHours(1).plusMinutes(30));
+        assertEquals("Train departure details: departure-time = 12:30, line = L1, train-number = 123, destination = Oslo, track = 1, delay = 1 hours 30 minutes", trainDeparture3.printDetails());
+    }
 
 
 
