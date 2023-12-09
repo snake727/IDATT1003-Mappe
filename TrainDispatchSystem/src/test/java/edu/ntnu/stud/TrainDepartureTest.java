@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class creates the framework for testing the TrainDeparture class.
- * @version 1.1 2023-12-07
+ * @version 1.2 2023-12-09
  */
 
 class TrainDepartureTest {
@@ -26,24 +26,22 @@ class TrainDepartureTest {
     @DisplayName("Check if setTrack works")
     void testSetTrack() {
         TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", "1", Duration.ofMinutes(0));
+
+        // Checks if setTrack works when track is set to a single positive digit.
         trainDeparture.setTrack("2");
         assertEquals("2", trainDeparture.getTrack());
 
+        // Checks if setTrack works when track is set to a single negative digit.
+        trainDeparture.setTrack("-2");
+        assertEquals("-2", trainDeparture.getTrack());
     }
 
     @Test
-    @DisplayName("Check if setTrack throws IllegalArgumentException when track is not a positive number")
+    @DisplayName("Check if setTrack throws IllegalArgumentException when track is a letter or the - character")
     void testSetTrackThrowsIllegalArgumentExceptionWhenTrackIs() {
         TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", "1", Duration.ofMinutes(0));
-
-        // Checks if IllegalArgumentException is thrown when track is set to null.
-        assertThrows(IllegalArgumentException.class, () -> trainDeparture.setTrack(null));
-
-        // Checks if IllegalArgumentException is thrown when track is set to a string.
         assertThrows(IllegalArgumentException.class, () -> trainDeparture.setTrack("a"));
-
-        // Checks if IllegalArgumentException is thrown when track is set to a negative number.
-        assertThrows(IllegalArgumentException.class, () -> trainDeparture.setTrack("-1"));
+        assertThrows(IllegalArgumentException.class, () -> trainDeparture.setTrack("-"));
     }
 
     @Test
@@ -159,7 +157,4 @@ class TrainDepartureTest {
         TrainDeparture trainDeparture3 = new TrainDeparture(LocalTime.of(12, 30), "L1", 123, "Oslo", "1", Duration.ofHours(1).plusMinutes(30));
         assertEquals("Train departure details: departure-time = 12:30, line = L1, train-number = 123, destination = Oslo, track = 1, delay = 1 hours 30 minutes", trainDeparture3.printDetails());
     }
-
-
-
 }
