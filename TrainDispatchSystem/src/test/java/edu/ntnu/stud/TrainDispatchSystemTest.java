@@ -2,6 +2,7 @@ package edu.ntnu.stud;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 
 /**
  * This class creates the framework for testing the TrainDispatchSystem class.
- * @version 1.1 2023-12-09
+ * @version 1.2 2023-12-09
  */
 
 class TrainDispatchSystemTest {
@@ -141,6 +142,17 @@ class TrainDispatchSystemTest {
         assertNotNull(trainDispatchSystem.getTrainDepartureByTrainNumber(2));
     }
 
-
-
+    @Test
+    @DisplayName("Check if the getTrainDepartures method works")
+    void testGetTrainDepartures() {
+        TrainDispatchSystem system = new TrainDispatchSystem();
+        TrainDeparture trainDeparture1 = new TrainDeparture(LocalTime.of(12,30), "L1", 1, "Oslo", null, Duration.ofMinutes(0));
+        TrainDeparture trainDeparture2 = new TrainDeparture(LocalTime.of(13,30), "L2", 2, "Oslo", null, Duration.ofMinutes(0));
+        system.addTrainDeparture(trainDeparture1);
+        system.addTrainDeparture(trainDeparture2);
+        List<TrainDeparture> trainDepartures = system.getTrainDepartures();
+        assertEquals(2, trainDepartures.size());
+        assertEquals(trainDeparture1, trainDepartures.get(0));
+        assertEquals(trainDeparture2, trainDepartures.get(1));
+    }
 }
