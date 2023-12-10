@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
 /**
- * This class creates the framework for testing the TrainDispatchSystem class.
- * @version 1.2 2023-12-09
+ * This class creates the framework for testing the TrainDispatchSystem class. Remember to add @BeforeEach and possibly @BeforeAll if needed!
+ * @version 1.3 2023-12-10
  */
 
 class TrainDispatchSystemTest {
@@ -20,7 +20,7 @@ class TrainDispatchSystemTest {
         TrainDispatchSystem trainDispatchSystem = new TrainDispatchSystem();
         TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", "1", Duration.ofMinutes(0));
         trainDispatchSystem.addTrainDeparture(trainDeparture);
-        assertEquals(trainDeparture, trainDispatchSystem.getTrainDepartureByTrainNumber(1));
+        assertEquals(trainDeparture, trainDispatchSystem.getTrainDeparturesByVariable("trainNumber", "1")[0]);
     }
 
     @Test
@@ -37,10 +37,9 @@ class TrainDispatchSystemTest {
     @DisplayName("Check if removeTrainDeparture works")
     void testRemoveTrainDeparture() {
         TrainDispatchSystem trainDispatchSystem = new TrainDispatchSystem();
-        TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", "1", Duration.ofMinutes(0));
+        TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", null, Duration.ofMinutes(0));
         trainDispatchSystem.addTrainDeparture(trainDeparture);
-        trainDispatchSystem.removeTrainDeparture(0);
-        assertNull(trainDispatchSystem.getTrainDepartureByTrainNumber(1));
+        assertTrue(trainDispatchSystem.removeTrainDeparture(1));
     }
 
     @Test
@@ -68,7 +67,7 @@ class TrainDispatchSystemTest {
         TrainDispatchSystem trainDispatchSystem = new TrainDispatchSystem();
         TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12, 30), "L1", 1, "Oslo", "1", Duration.ofMinutes(0));
         trainDispatchSystem.addTrainDeparture(trainDeparture);
-        assertEquals(trainDeparture, trainDispatchSystem.getTrainDepartureByTrainNumber(1));
+        assertEquals(trainDeparture, trainDispatchSystem.getTrainDeparturesByVariable("trainNumber", "1")[0]);
     }
 
     @Test
@@ -83,7 +82,7 @@ class TrainDispatchSystemTest {
         trainDispatchSystem.addTrainDeparture(trainDeparture2);
         trainDispatchSystem.addTrainDeparture(trainDeparture3);
         trainDispatchSystem.addTrainDeparture(trainDeparture4);
-        TrainDeparture[] trainDepartures = trainDispatchSystem.getTrainDeparturesByDestination("Oslo");
+        TrainDeparture[] trainDepartures = trainDispatchSystem.getTrainDeparturesByVariable("destination", "Oslo");
         assertEquals(2, trainDepartures.length);
         assertEquals(trainDeparture1, trainDepartures[0]);
         assertEquals(trainDeparture2, trainDepartures[1]);
@@ -138,8 +137,8 @@ class TrainDispatchSystemTest {
         trainDispatchSystem.addTrainDeparture(trainDeparture1);
         trainDispatchSystem.addTrainDeparture(trainDeparture2);
         trainDispatchSystem.removeTrainDepartureIfDeparted(clock.getCurrentTime());
-        assertNull(trainDispatchSystem.getTrainDepartureByTrainNumber(1));
-        assertNotNull(trainDispatchSystem.getTrainDepartureByTrainNumber(2));
+        assertEquals(0, trainDispatchSystem.getTrainDeparturesByVariable("trainNumber", "1").length);
+        assertEquals(1, trainDispatchSystem.getTrainDeparturesByVariable("trainNumber", "2").length);
     }
 
     @Test
@@ -154,5 +153,24 @@ class TrainDispatchSystemTest {
         assertEquals(2, trainDepartures.size());
         assertEquals(trainDeparture1, trainDepartures.get(0));
         assertEquals(trainDeparture2, trainDepartures.get(1));
+    }
+
+    @Test
+    @DisplayName("Check if the updateTrainDeparture method works when departure time is changed")
+    void testUpdateTrainDepartureWhenDepartureTimeIsChanged() {
+        TrainDispatchSystem system = new TrainDispatchSystem();
+        TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12,30), "L1", 1, "Oslo", null, Duration.ofMinutes(0));
+        system.addTrainDeparture(trainDeparture);
+        system.updateTrainDeparture(1, "departure-time (hh:mm)", "13:30");
+        assertEquals(LocalTime.of(13,30), trainDeparture.getDepartureTime());
+    }
+
+    @Test
+    @DisplayName("Check if the updateTrainDeparture method works when the type of information to change is invalid")
+    void testUpdateTrainDepartureWhenTypeOfInformationToChangeIsInvalid() {
+        TrainDispatchSystem system = new TrainDispatchSystem();
+        TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(12,30), "L1", 1, "Oslo", null, Duration.ofMinutes(0));
+        system.addTrainDeparture(trainDeparture);
+        assertThrows(IllegalArgumentException.class, () -> system.updateTrainDeparture(1, "invalid", "13:30"));
     }
 }
