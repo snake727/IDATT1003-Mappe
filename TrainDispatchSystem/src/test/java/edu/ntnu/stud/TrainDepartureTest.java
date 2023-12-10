@@ -9,10 +9,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * This class creates the framework for testing the TrainDeparture class.
- * @version 1.2 2023-12-09
+ * This class creates the framework for testing the TrainDeparture class. Remember to add @BeforeEach and possibly @BeforeAll if needed!
+ * @version 1.3 2023-12-10
  */
-
 class TrainDepartureTest {
     @Test
     @DisplayName("Check if setDestination() works")
