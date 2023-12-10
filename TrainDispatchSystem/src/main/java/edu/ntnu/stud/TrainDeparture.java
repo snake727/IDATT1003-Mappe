@@ -12,7 +12,7 @@ import java.time.LocalTime;
  * LocalTime, String, int, Duration
  * These data types fit the variables because:
  * departureTime is a time, line is a string, trainNumber is an integer, destination is a string, track is an integer, delay is a duration.
- * @version 1.4 2023-12-09
+ * @version 1.5 2023-12-10
  * */
 
 public class TrainDeparture {
@@ -63,9 +63,9 @@ public class TrainDeparture {
     }
 
     /**
-     * Method that sets the line. The line is assigned as a String, but converted to a char before being assigned to the line variable, this is to ensure that the line is only one character followed by one digit. It also throws a custom exception if the line is null or if the line does not meet the requirements.
+     * Method that sets the line. The line is assigned as a String, but converted to an uppercase char before being assigned to the line variable, this is to ensure that the line is only one character followed by one digit. It also throws a custom exception if the line is null or if the line does not meet the requirements.
      * @param line the line the train is supposed to follow.
-     * @throws IllegalArgumentException if the line is null, or if the string is not one char followed by one digit.
+     * @throws IllegalArgumentException if the line is null, or if the string is not one uppercase char followed by one digit.
      * */
     public void setLine(String line) {
         if (line == null || !line.matches("[A-Z]\\d")) {
