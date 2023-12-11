@@ -2,7 +2,6 @@ package edu.ntnu.stud;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This class represents a train departure.
@@ -219,7 +218,7 @@ public class TrainDeparture {
    * @return true if the train has departed, false if not.
    * */
 
-  public boolean hasDeparted(@NotNull LocalTime currentTime) {
+  public boolean hasDeparted(LocalTime currentTime) {
     return currentTime.isAfter(tdt.plus(del));
   }
 

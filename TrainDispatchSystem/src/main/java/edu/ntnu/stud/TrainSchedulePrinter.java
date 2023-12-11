@@ -2,7 +2,6 @@ package edu.ntnu.stud;
 
 import java.util.Comparator;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This class prints the train schedule.
@@ -20,7 +19,7 @@ public class TrainSchedulePrinter {
    * @param trainDepartures the list of train departures to be printed.
    * @return the train departures sorted by adjusted departure time.
    * */
-  public String printSchedule(@NotNull List<TrainDeparture> trainDepartures) {
+  public String printSchedule(List<TrainDeparture> trainDepartures) {
     // Sort the train departures by adjusted departure time
     List<TrainDeparture> sortedTrainDepartures = trainDepartures.stream()
           .sorted(Comparator.comparing(TrainDeparture::getTdt))
