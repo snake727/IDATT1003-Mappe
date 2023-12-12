@@ -1,31 +1,25 @@
 # Portfolio project IDATA1003 - 2023
 This file uses Mark Down syntax. For more information see [here](https://www.markdownguide.org/basic-syntax/).
 
-STUDENT NAME = "Your name"  
-STUDENT ID = "Your ID"
+STUDENT NAME = "10038"  
+STUDENT ID = "10038"
 
 ## Project description
 
-[//]: # (TODO: Write a short description of your project/product here.)
+[//]: # This repo contains the project that I have been working on as part of my education at NTNU. It is a train dispatch system with a text-based user menu.
 
 ## Project structure
 
-[//]: # (TODO: Describe the structure of your project here. How have you used packages in your structure. Where are all sourcefiles stored. Where are all JUnit-test classes stored. etc.)
+[//]: # In this repo you will find TrainDispatchSystem folder. Inside this folder, you will find the src/ folder and a file called pom.xml. These are two crucial components of a maven project.
 
 ## Link to repository
 
-[//]: # (TODO: Include a link to your repository here.)
+[//]: # (https://github.com/snake727/IDATT1003-Mappe/tree/main)
 
 ## How to run the project
 
-[//]: # (TODO: Describe how to run your project here. What is the main class? What is the main method?
-What is the input and output of the program? What is the expected behaviour of the program?)
+[//]: # Simply copy all the Java files within src/main/java/edu/ntnu/stud and src/test/java/edu/ntnu/stud and the pom.xml file to your own maven project. Once that is done, you should be able to run the files within your own IDE. It should prompt you with a menu in the terminal, where you can interact with the system.
 
 ## How to run the tests
 
-[//]: # (TODO: Describe how to run the tests here.)
-
-## References
-
-[//]: # (TODO: Include references here, if any. For example, if you have used code from the course book, include a reference to the chapter.
-Or if you have used code from a website or other source, include a link to the source.)
+[//]: # To run the tests, either use a terminal and type "mvn test" while in the project folder, or you could run the tests directly in your IDE by executing them inside your own project.
